@@ -3,21 +3,61 @@ window.addEventListener("load", function(){
    let form = document.getElementById("launchForm")
 
    form.addEventListener("submit", function(event) {
-      let pilotVal = document.querySelector("input[name=pilotName]")
+      let pilot = document.querySelector("input[name=pilotName]")
 
-      let copilotVal = document.querySelector("input[name=copilotName]")
+      let copilot = document.querySelector("input[name=copilotName]")
       
-      let fuelLevelVal = document.querySelector("input[name=fuelLevel]")
+      let fuelLevel = document.querySelector("input[name=fuelLevel]")
 
-      let cargoMassVal = document.querySelector("input[name=cargoMass]")
+      let cargoMass = document.querySelector("input[name=cargoMass]")
 
-      if (pilotVal.value.length == 0 || 
-         copilotVal.value.length == 0 || 
-         fuelLevelVal.value.length == 0 || 
-         cargoMassVal.value.length == 0) {
-            alert("forgot something!")
-            event.preventDefault()
+      if (pilot.value.length == 0 || 
+         copilot.value.length == 0 || 
+         fuelLevel.value.length == 0 || 
+         cargoMass.value.length == 0) {
+            alert("forgot something!");
+            event.preventDefault();
          }
+
+      if (isNaN(fuelLevel.value) ||
+         isNaN(cargoMass.value) ||
+         !isNaN(pilot.value) ||
+         !isNaN(copilot.value)) {
+         alert("invalid entry!");
+         event.preventDefault();
+      }
+
+
+      //remove later
+      // document.getElementById("faultyItems").style.visibility = "visible"
+
+      
+      
+      document.getElementById("pilotStatus").innerHTML = `Pilot ${pilot.value} Ready`
+      
+      document.querySelector("#copilotStatus").innerHTML = `Copilot ${copilot.value} Ready`
+
+      let launchStatus = document.getElementById("launchStatus")
+      
+      if (Number(fuelLevel.value) < 10000) {
+         document.getElementById("faultyItems").style.visibility = "visible"
+         document.getElementById("fuelStatus").innerHTML = `Fuel: ${fuelLevel.value}. Not enough fuel!`
+         launchStatus.innerHTML = "Shuttle not ready for launch"
+         launchStatus.style.color = "red"
+      }
+
+      if (cargoMass.value > 10000) {
+         document.getElementById("faultyItems").style.visibility = "visible"
+         document.getElementById("cargoStatus").innerHTML = `Shuttle is too heavy!`
+         launchStatus.innerHTML = "Shuttle not ready for launch"
+         launchStatus.style.color = "red"
+      }
+
+      launchStatus.innerHTML = "Shuttle is ready for launch"
+      launchStatus.style.color = "green"
+
+      //remove later
+      event.preventDefault()
 
    })
 
