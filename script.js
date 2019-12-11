@@ -44,6 +44,9 @@ window.addEventListener("load", function(){
          document.getElementById("fuelStatus").innerHTML = `Fuel: ${fuelLevel.value}. Not enough fuel!`
          launchStatus.innerHTML = "Shuttle not ready for launch"
          launchStatus.style.color = "red"
+      } else {
+         launchStatus.innerHTML = "Shuttle is ready for launch"
+         launchStatus.style.color = "green"
       }
 
       if (cargoMass.value > 10000) {
@@ -51,28 +54,35 @@ window.addEventListener("load", function(){
          document.getElementById("cargoStatus").innerHTML = `Shuttle is too heavy!`
          launchStatus.innerHTML = "Shuttle not ready for launch"
          launchStatus.style.color = "red"
+      } else {
+         launchStatus.innerHTML = "Shuttle is ready for launch"
+         launchStatus.style.color = "green"
       }
 
-      launchStatus.innerHTML = "Shuttle is ready for launch"
-      launchStatus.style.color = "green"
+      let planetIndex = randomNum()
 
-      //remove later
-      event.preventDefault()
+      fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+         response.json().then( function(json) {
+
+            let missionTarget = document.getElementById("missionTarget")
+
+            missionTarget.innerHTML = `<h2>Mission Destination</h2>
+               <ol>
+                  <li>Name: ${json[planetIndex]["name"]}</li>
+                  <li>Diameter: ${json[planetIndex]["diameter"]}</li>
+                  <li>Star: ${json[planetIndex]["star"]}</li>
+                  <li>Distance from Earth: ${json[planetIndex]["distance"]}</li>
+                  <li>Number of Moons: ${json[planetIndex]["moons"]}</li>
+               </ol>
+            <img src="${json[planetIndex]["image"]}"></img>`
+
+         })
+      })
 
    })
 
 })
 
-
-
-/* This block of code shows how to format the HTML once you fetch some planetary JSON!
-<h2>Mission Destination</h2>
-<ol>
-   <li>Name: ${}</li>
-   <li>Diameter: ${}</li>
-   <li>Star: ${}</li>
-   <li>Distance from Earth: ${}</li>
-   <li>Number of Moons: ${}</li>
-</ol>
-<img src="${}">
-*/
+function randomNum() {
+   return Math.round((Math.random()*5))
+}
